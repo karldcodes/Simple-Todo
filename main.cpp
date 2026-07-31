@@ -5,7 +5,6 @@
 #include <conio.h>
 #include <fstream>
 
-
 using namespace std;
 
 const string file_name = "todo.txt";
@@ -79,8 +78,6 @@ int main() {
                 cout << "Enter a todo: ";
                 getline(cin, sentence);
                 tasks.push_back(sentence);
-
-                write_tasks_to_file(tasks);
             }
 
             if (command == 'd')
@@ -101,14 +98,13 @@ int main() {
                         tasks.erase(tasks.begin() + taskNumber - 1);
                     }    
                 }
-
-                write_tasks_to_file(tasks);
             }
 
             if (command == 'q'){
                 break;
             }
 
+            write_tasks_to_file(tasks);
             displayTasks(tasks);
             showCommandList();
         }

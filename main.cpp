@@ -3,8 +3,12 @@
 #include <vector>
 #include <cstdlib>
 #include <conio.h>
+#include <fstream>
+
 
 using namespace std;
+
+const string file_name = "todo.txt";
 
 void clearScreen() {
 #ifdef _WIN32
@@ -35,8 +39,29 @@ void showCommandList(){
     cout << "Enter command: (d)elete task, (a)dd task, (q)uit" << endl;
 }
 
+void write_tasks_to_file(const vector<string>& tasks){
+    ofstream myfile (file_name);
+    if (myfile.is_open())
+    {
+        for (int i = 0; i < tasks.size(); i++) {
+            myfile << tasks[i] << endl;
+        }
+        myfile.close();
+    }
+}
+
 int main() {
     vector<string> tasks;
+
+    std::ifstream file(file_name);
+
+    if (file.is_open()){
+        string line;
+        while (std::getline (file, line)) {
+            tasks.push_back(line);
+        }
+        file.close();
+    }
 
     displayTasks(tasks);
     showCommandList();
@@ -54,6 +79,8 @@ int main() {
                 cout << "Enter a todo: ";
                 getline(cin, sentence);
                 tasks.push_back(sentence);
+
+                write_tasks_to_file(tasks);
             }
 
             if (command == 'd')
@@ -74,6 +101,8 @@ int main() {
                         tasks.erase(tasks.begin() + taskNumber - 1);
                     }    
                 }
+
+                write_tasks_to_file(tasks);
             }
 
             if (command == 'q'){
